@@ -14,6 +14,13 @@ class StagingSite
      * @var Authenticate
      */
     public Authenticate $auth;
+
+    /**
+     * Staging headers
+     * @var Headers
+     */
+    public Headers $headers;
+
     private LoginPage $loginPage;
     private ?bool $staging = null;
     private ?string $environment = null;
@@ -28,11 +35,12 @@ class StagingSite
      * Either one name or an array of names
      * @var string|array
      */
-    public string|array $stagingEnvironment = 'staging';
+    public string|array $stagingEnvironments = 'staging';
 
     public function __construct()
     {
         $this->auth = new Authenticate();
+        $this->headers = new Headers();
     }
 
     /**
@@ -41,10 +49,15 @@ class StagingSite
      */
     public function getStagingEnvironments(): array
     {
-        if (is_string($this->stagingEnvironment)) {
-            return [$this->stagingEnvironment];
+        if (is_string($this->stagingEnvironments)) {
+            return [$this->stagingEnvironments];
         }
-        return $this->stagingEnvironment;
+        return $this->stagingEnvironments;
+    }
+
+    public function setStagingEnvironments(string|array $stagingEnvironment): void
+    {
+        $this->stagingEnvironments = $stagingEnvironment;
     }
 
     /**
@@ -59,6 +72,15 @@ class StagingSite
 
         $this->staging = in_array($this->getEnvironment(), $this->getStagingEnvironments());
         return $this->staging;
+    }
+
+    /**
+     * Set the environment name
+     * @param string $environment
+     */
+    public function setEnvironment(string $environment): void
+    {
+        $this->environment = $environment;
     }
 
     /**
@@ -152,7 +174,7 @@ class StagingSite
             $instance->environmentVariable = $environmentVariable;
         }
         if (null !== $stagingEnvironment) {
-            $instance->stagingEnvironment = $stagingEnvironment;
+            $instance->stagingEnvironments = $stagingEnvironment;
         }
 
         if ($instance->isStaging()) {
@@ -172,8 +194,7 @@ class StagingSite
         }
 
         // Output staging HTTP headers
-        $headers = new Headers();
-        $headers->outputHeaders();
+        $instance->headers->outputHeaders();
     }
 
     /**

@@ -22,8 +22,8 @@ Register the Symfony event listener by editing `config/services.yaml`
 ```php
 # config/services.yaml
 services:
-    Studio24\StagingSite\Symfony\StagingSiteEventListener:
-        tags: [kernel.event_listener]
+    Studio24\StagingSite\Symfony\StagingSiteEventSubscriber:
+        tags: [kernel.event_subscriber]
 ```
 
 ## Customising options

@@ -22,7 +22,22 @@ class StagingSiteMiddleware
             return $next($request);
         }
 
-        StagingSite::run('APP_ENV', ['stage', 'staging']);
+        // Staging site authentication
+        $staging = new StagingSite();
+        $staging->setEnvironment(env('APP_ENV'));
+        $staging->setStagingEnvironments(['stage', 'staging']);
+        if ($staging->isStaging()) {
+            $staging->authenticate();
+
+            // Block search engines from indexing staging site
+            $response = $next($request);
+            foreach ($staging->headers->getHeaders() as $name => $value) {
+                $response->headers->set($name, $value, $staging->headers->replace($name));
+            }
+
+            return $response;
+        }
+
         return $next($request);
     }
 }

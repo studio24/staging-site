@@ -55,13 +55,22 @@ class Headers
     }
 
     /**
+     * Whether this header should replace previous HTTP headers
+     * @param string $name HTTP header name
+     * @return bool
+     */
+    public function replace(string $name): bool
+    {
+        return in_array($name, $this->replace);
+    }
+
+    /**
      * Output HTTP headers via header() function
      */
     public function outputHeaders(): void
     {
         foreach ($this->getHeaders() as $name => $value) {
-            $replace = in_array($name, $this->replace);
-            header(sprintf('%s: %s', $name, $value), $replace);
+            header(sprintf('%s: %s', $name, $value), $this->replace($name));
         }
     }
 }
