@@ -39,13 +39,39 @@ require_once __DIR__ . '/../vendor/autoload.php';
 > Please note you may need to change the path to your vendor directory based on your project folder structure.
 
 
-Add the following line:
+Add the following lines:
 
 ```php
-\Studio24\StagingSitePassword\Controller::run();
+use Studio24\StagingSite\StagingSite;
+
+// Display login page on staging
+StagingSite::run();
+
+// Block search engines from indexing staging site
+StagingSite::headers();
 ```
 
 By default, this will display the staging site password based on:
 
 * Environment variable: `ENVIRONMENT`
-* Non-staging environments it ignores: production, local
+* Staging environments: `staging`
+
+### Staging banner
+
+Output the staging banner via:
+
+```php
+<?php echo \Studio24\StagingSite\StagingSite::banner() ?>
+```
+
+Or via the short echo tag:
+
+```php
+<?= \Studio24\StagingSite\StagingSite::banner() ?>
+```
+
+You can add additional details to the staging banner via passing a string to the `banner()` method:
+
+```php
+<?= \Studio24\StagingSite\StagingSite::banner('additional details here') ?>
+```

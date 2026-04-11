@@ -3,7 +3,7 @@
 This will display the staging site password based on:
 
 * Environment variable: `WP_ENVIRONMENT_TYPE`
-* Non-staging environments it ignores: production, local
+* Staging environments: `staging`
 
 This uses a [must-use plugin](https://developer.wordpress.org/advanced-administration/plugins/mu-plugins/) in WordPress, so this cannot be disabled via WordPress admin.
 
@@ -39,7 +39,7 @@ Replacing `your password hash` with the password hash string generated in the "c
 Copy the file [staging-site-password.php](wordpress/staging-site-password.php) to your mu-plugins directory:
 
 ```bash
-cp vendor/studio24/staging-site-password/wordpress/staging-site-password.php wp-content/mu-plugins/
+cp vendor/studio24/staging-site/wordpress/staging-site.php wp-content/mu-plugins/
 ```
 
 > [!NOTE]  

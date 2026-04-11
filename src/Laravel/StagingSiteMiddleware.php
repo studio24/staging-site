@@ -6,7 +6,7 @@ namespace Studio24\StagingSite\Laravel;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Studio24\StagingSite\Controller as StagingSiteController;
+use Studio24\StagingSite\StagingSite;
 
 class StagingSiteMiddleware
 {
@@ -22,7 +22,7 @@ class StagingSiteMiddleware
             return $next($request);
         }
 
-        StagingSiteController::run('laravel');
+        StagingSite::run('APP_ENV', ['stage', 'staging']);
         return $next($request);
     }
 }

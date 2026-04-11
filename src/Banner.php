@@ -5,6 +5,8 @@ namespace Studio24\StagingSite;
 
 class Banner
 {
+    public function getHtml(): string {
 
+    }
 
 }

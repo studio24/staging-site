@@ -3,7 +3,7 @@
 This will display the staging site password based on:
 
 * Environment variable: `APP_ENV`
-* Non-staging environments it ignores: prod, dev
+* Staging environments: `staging`, `stage`
 
 ## Staging site password
 
@@ -22,6 +22,10 @@ Register the Symfony event listener by editing `config/services.yaml`
 ```php
 # config/services.yaml
 services:
-    Studio24\StagingSitePassword\Symfony\StagingSitePasswordEventListener:
+    Studio24\StagingSite\Symfony\StagingSiteEventListener:
         tags: [kernel.event_listener]
 ```
+
+## Customising options
+
+You can copy the file `vendor/studio24/staging-site/src/Symfony/StagingSiteEventListener.php` to your project and customise the options.

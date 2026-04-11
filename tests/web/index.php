@@ -1,6 +1,6 @@
 <?php
-include '../vendor/autoload.php';
-include '../staging-site-password.php';
+include 'include.php';
+echo $staging->getBanner();
 ?>
 <!doctype html>
 <html lang="en" class="no-js">
@@ -17,7 +17,7 @@ include '../staging-site-password.php';
         <main id="main">
 
             <h1>Test website</h1>
-            <p>Hello, this is a test page. <a href="page2.php">Link to page 2</a>.</p>
+            <p>Hello, this is a test page. <a href="../website/page2.php">Link to page 2</a>.</p>
 
         </main>
     </div>

@@ -61,25 +61,6 @@ if ($controller->isStaging()) {
 }
 ```
 
-### Blocking search engines from indexing staging sites
-
-Search engines should be told not to index non-production websites, otherwise they'll appear in search results and may affect the ranking of your production URLs.
-
-The staging site login page will set the following HTTP header to discourage search engines from indexing this page:
-
-```
-X-Robots-Tag: noindex, nofollow
-```
-
-We recommend you add the following to your `robots.txt` on staging only:
-
-```
-User-agent: *
-Disallow: /
-```
-
-Please ensure you allow search engines to index your production website.
-
 ### Text
 
 You can customise any text on the login page via `$controller->loginPage->setPlaceholder($name, $value)`.

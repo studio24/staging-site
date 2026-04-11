@@ -5,7 +5,7 @@ These instructions are for Craft CMS v4 or v5.
 This will display the staging site password based on:
 
 * Environment variable: `CRAFT_ENVIRONMENT`
-* Non-staging environments it ignores: production, dev
+* Staging environments: `staging`, `stage`
 
 ## Staging site password
 
@@ -24,7 +24,7 @@ Register the Craft module by editing `config/app.php`:
 ```php
 return [
     'modules' => [
-        'staging-site-password' => Studio24\StagingSitePassword\CraftCms\StagingSitePasswordModule::class,
+        'staging-site-password' => Studio24\StagingSite\CraftCms\StagingSiteModule::class,
     ],
     'bootstrap' => [
         'staging-site-password',
@@ -33,3 +33,7 @@ return [
 ```
 
 See https://craftcms.com/docs/5.x/extend/module-guide.html#update-the-application-config
+
+## Customising options
+
+You can copy the file `vendor/studio24/staging-site/src/CraftCms/StagingSiteModule.php` to your project and customise the options.

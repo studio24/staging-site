@@ -3,7 +3,7 @@
 This will display the staging site password based on:
 
 * Environment variable: `APP_ENV`
-* Non-staging environments it ignores: production, local
+* Staging environments: `staging`, `stage`
 
 ## Staging site password
 
@@ -20,16 +20,19 @@ Replacing `your password hash` with the password hash string generated in the "c
 Register the Laravel middleware by editing `bootstrap/app.php`
 
 ```php
-use Studio24\StagingSitePassword\Laravel\StagingSitePasswordMiddleware;
+use Studio24\StagingSite\Laravel\StagingSiteMiddleware;
 ```
 
 Append it to the global middleware stack:
 
 ```php
     ->withMiddleware(function (Middleware $middleware) {
-        $middleware->prepend(StagingSitePasswordMiddleware::class);
+        $middleware->prepend(StagingSiteMiddleware::class);
     })
 ```
 
 See https://laravel.com/docs/13.x/middleware#registering-middleware
 
+## Customising options
+
+You can copy the file `vendor/studio24/staging-site/src/Laravel/StagingSiteMiddleware.php` to your project and customise the options.

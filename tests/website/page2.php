@@ -39,13 +39,15 @@ require_once 'include.php';
 <?= \Studio24\StagingSite\StagingSite::banner() ?>
 <main>
 
-    <h1>Hello world</h1>
+    <h1>This is page 2</h1>
 
     <p>All OK!</p>
 
-    <p>See <a href="page2.php">page 2</a></p>
+    <p>See <a href="index.php">page 1</a></p>
 
     <p>You can test a <a href="production.php">production page</a></p>
+
+    <p>You can <a href="?staging_site_logout">logout of the staging site</a></p>
 
 </main>
 </body>

@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Studio24\StagingSite\Symfony;
 
-use Studio24\StagingSite\Controller as StagingSiteController;
+use Studio24\StagingSite\StagingSite;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 
 class StagingSiteEventListener
@@ -18,6 +18,6 @@ class StagingSiteEventListener
             return;
         }
 
-        StagingSiteController::run('symfony');
+        StagingSite::run('APP_ENV', ['stage', 'staging']);
     }
 }

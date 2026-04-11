@@ -1,4 +1,5 @@
 <?php
+define('ENVIRONMENT', 'production');
 require_once 'include.php';
 ?>
 <!doctype html>
@@ -39,13 +40,11 @@ require_once 'include.php';
 <?= \Studio24\StagingSite\StagingSite::banner() ?>
 <main>
 
-    <h1>Hello world</h1>
+    <h1>This is a test production page</h1>
 
     <p>All OK!</p>
 
-    <p>See <a href="page2.php">page 2</a></p>
-
-    <p>You can test a <a href="production.php">production page</a></p>
+    <p>See <a href="index.php">page 1</a> or <a href="page2.php">page 2</a></p>
 
 </main>
 </body>

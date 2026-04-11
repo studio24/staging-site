@@ -1,4 +1,4 @@
-#  Staging Site tools
+#  Staging site tools
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/studio24/staging-site.svg?style=flat-square)](https://packagist.org/packages/studio24/staging-site)
 [![Tests](https://img.shields.io/github/actions/workflow/status/studio24/staging-site/php.yml?branch=main&label=tests&style=flat-square)](https://github.com/studio24/staging-site/actions/workflows/php.yml)
@@ -12,10 +12,10 @@ When creating or updating a website it's a good idea to publish changes to a sta
 This package adds the following simple tools to a staging site:
 
 * Secure staging websites behind a simple, accessible login page
-* Informs search engine spiders to not index a staging website
 * Displays a banner indicating the site is a staging site
+* Informs search engine spiders to not index a staging website
 
-It has support for WordPress, Craft CMS, Laravel, Symfony and plain PHP.
+It has support for WordPress, Craft CMS, Laravel, Symfony and plain PHP integration.
 
 ### Staging site login
 
@@ -31,9 +31,24 @@ The staging site login page is a replacement for basic authentication, which doe
 
 TODO
 
+### Inform search engines not to index a staging site
+
+To effectively stop a staging or development website appearing in search engine results we need to:
+
+- Tell search engines to not list web pages in search results
+- Allow web pages to be indexed
+
+We can easily block staging sites from being indexed via the HTTP header X-Robots-Tag:
+
+```
+X-Robots-Tag: "noindex, nofollow"
+```
+
+This package adds this header to all requests on a staging site.
+
 ## Requirements
 
-* PHP 7.4+
+* PHP 8.0+
 
 ## Installation
 
@@ -41,15 +56,15 @@ See the [documentation](docs/README.md) for instructions on how to install this 
 
 ## Testing
 
-## Testing
+You can test the staging login and banner via:
 
 ```shell
 php -S localhost:8000 -t tests/website
 ```
 
-Access http://localhost:8000
+Access http://localhost:8000 and use the staging password `test123`
 
-OR?
+You can run unit tests via:
 
 ```shell
 composer test

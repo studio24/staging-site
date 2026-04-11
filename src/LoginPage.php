@@ -2,9 +2,12 @@
 
 namespace Studio24\StagingSite;
 
-class LoginPage
+class LoginPage extends Template
 {
-    private array $placeholders = [
+    /**
+     * Array of default placeholder values
+     */
+    protected array $placeholders = [
         'title' => 'Login to staging website',
         'title_prefix_on_error' => 'Error: ',
         'password_field_label' => 'Password',
@@ -27,29 +30,6 @@ class LoginPage
         $this->auth = $auth;
     }
 
-    public function setPlaceholder(string $placeholder, string $value)
-    {
-        if (!array_key_exists($placeholder, $this->placeholders)) {
-            return;
-        }
-        $this->placeholders[$placeholder] = $value;
-    }
-
-    public function parseTemplate(string $template, array $placeholders = []): string
-    {
-        $path = __DIR__ . '/../templates/' . $template;
-        if (!file_exists($path)) {
-            throw new Exception(printf('Template file %s not found', $path));
-        }
-        $html = file_get_contents(__DIR__ . '/../templates/' . $template);
-
-        foreach ($placeholders as $placeholder => $value) {
-            $html = str_replace('{{ ' . $placeholder . ' }}', $value, $html);
-        }
-
-        return $html;
-    }
-
     public function displayPageAndExit(bool $exit = true)
     {
         if ($this->auth->hasError()) {
@@ -61,14 +41,13 @@ class LoginPage
         $this->placeholders['form_action'] = str_replace('staging_site_logout', '', $_SERVER['REQUEST_URI']);
         $html = $this->parseTemplate('login.html', $this->placeholders);
 
-        // Set headers
+        // 401 Unauthorized
         http_response_code(401);
-        header('Cache-Control: no-cache, no-store');
-        header('X-Robots-Tag: noindex, nofollow');
-        header('X-Powered-By: studio24/staging-site');
 
-        // @link https://xclacksoverhead.org/home/about
-        header('X-Clacks-Overhead: GNU Terry Pratchett');
+        // HTTP headers
+        $headers = new Headers();
+        $headers->setHeader('Cache-Control', 'no-cache, no-store');
+        $headers->outputHeaders();
 
         // Output page & exit
         echo $html;
