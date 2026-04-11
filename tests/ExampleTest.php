@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Studio24\PackageTemplate\Tests;
+namespace Studio24\StagingSite\Tests;
 
 use PHPUnit\Framework\TestCase;
 

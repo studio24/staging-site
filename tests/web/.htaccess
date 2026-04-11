@@ -1,0 +1,4 @@
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteRule . ../staging-site-password.php [P]
+</IfModule>
