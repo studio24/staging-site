@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Studio24\StagingSite\Laravel;
@@ -23,14 +24,18 @@ class StagingSiteMiddleware
         }
 
         // Staging site authentication
-        $staging = new StagingSite();
-        $staging->setEnvironment(env('APP_ENV'));
+        $staging = StagingSite::getInstance();
+        $environment = env('APP_ENV');
+        if (null !== $environment) {
+            $staging->setEnvironment($environment);
+        }
         $staging->setStagingEnvironments(['stage', 'staging']);
-        if ($staging->isStaging()) {
-            $staging->authenticate();
+        if ($staging->isStaging() && !$staging->authenticate(false)) {
+            $response = $next($request);
+            $response->setStatusCode(401);
+            $response->setContent($staging->getLoginPageHtml());
 
             // Block search engines from indexing staging site
-            $response = $next($request);
             foreach ($staging->headers->getHeaders() as $name => $value) {
                 $response->headers->set($name, $value, $staging->headers->replace($name));
             }

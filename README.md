@@ -12,7 +12,6 @@ When creating or updating a website it's a good idea to publish changes to a sta
 This package adds the following simple tools to a staging site:
 
 * Secure staging websites behind a simple, accessible login page
-* Displays a banner indicating the site is a staging site
 * Informs search engine spiders to not index a staging website
 
 It has support for WordPress, Craft CMS, Laravel, Symfony and plain PHP integration.
@@ -27,18 +26,23 @@ The staging site login page is a replacement for basic authentication, which doe
 
 [![Screenshot of the staging site password login page](screenshot.png)](screenshot.png)
 
-### Staging banner
+### How long are you logged in for?
 
-TODO
+By default, the login cookie is set to expire after 7 days. If your IP address or user agent changes, then you are also logged out.
+
+### Logout
+
+You can pass the GET parameter `?staging_site_logout=1` to any URL on your staging website to log the user out.
 
 ### Inform search engines not to index a staging site
 
 To effectively stop a staging or development website appearing in search engine results we need to:
 
 - Tell search engines to not list web pages in search results
-- Allow web pages to be indexed
+- But allow search engines to access the web pages so they can read this instruction
+ 
 
-We can easily block staging sites from being indexed via the HTTP header X-Robots-Tag:
+We can block staging sites from being indexed via the HTTP header X-Robots-Tag:
 
 ```
 X-Robots-Tag: "noindex, nofollow"
@@ -48,7 +52,7 @@ This package adds this header to all requests on a staging site.
 
 ## Requirements
 
-* PHP 8.0+
+* PHP 8.1+
 
 ## Installation
 
@@ -56,7 +60,7 @@ See the [documentation](docs/README.md) for instructions on how to install this 
 
 ## Testing
 
-You can test the staging login and banner via:
+You can test the staging login via:
 
 ```shell
 php -S localhost:8000 -t tests/website

@@ -2,10 +2,16 @@
 
 ## Installation
 
-You can install the package via [Composer](https://getcomposer.org/):
+Install the package via [Composer](https://getcomposer.org/):
 
 ```bash
 composer require studio24/staging-site
+```
+
+If your application does not already use Composer, make sure you load the vendor packages early in your code (update to use the correct path):
+
+```php
+require __DIR__ . '/../vendor/autoload.php';
 ```
 
 ## Create a password hash
@@ -35,46 +41,41 @@ Next choose your platform to install this on your website. In the examples below
 
 ## Customisation options
 
-TODO
-
-## Customise options
-
-If you want to customise the options, then you need a bit more code:
+If you want to customise the options, then you need a bit more code. The following examples are for WordPress.
 
 ```php
-$controller = new \Studio24\StagingSitePassword\Controller($platform, $passwordHash);
-if ($controller->isStaging()) {
-    $controller->authenticate();
+use Studio24\StagingSite\StagingSite;
+
+// Setup staging
+$staging = new StagingSite();
+$staging->setStagingEnvironments('staging');
+$staging->setEnvironment($_ENV['WP_ENVIRONMENT_TYPE']);
+
+// Add custom setup here...
+
+// Authenticate
+if ($staging->isStaging()) {
+    $staging->authenticate();
 }
 ```
 
-## How to customise the login page
+### How to customise the login page
 
-If you want to customise any options, you can do so via the controller object. Make sure you add your code before `$controller->authenticate()`
-is run. For example:
+If you want to customise any options, you can do so via the controller object. Make sure you add your code before `$staging->authenticate()`
+is run. 
 
-```php
-$controller = new \Studio24\StagingSitePassword\Controller($platform);
-$controller->loginPage->setPlaceholder('title', 'Login to My Website');
-if ($controller->isStaging()) {
-    $controller->authenticate();
-}
-```
-
-### Text
-
-You can customise any text on the login page via `$controller->loginPage->setPlaceholder($name, $value)`.
+You can customise any text on the login page via `$staging->loginPage->setPlaceholder($name, $value)`.
 
 Customise the title:
 
 ```php
-$controller->loginPage->setPlaceholder('title', 'Login to My Website');
+$staging->loginPage->setPlaceholder('title', 'Login to My Website');
 ```
 
 Customise the footer text (you can include HTML):
 
 ```php
-$controller->loginPage->setPlaceholder('footer', 'Get support from <a href="mailto:support@studio24.net">Studio 24</a>');
+$staging->loginPage->setPlaceholder('footer', 'Get support from <a href="mailto:support@studio24.net">Studio 24</a>');
 ```
 
 The full list of placeholders:
@@ -98,19 +99,19 @@ The full list of placeholders:
 By default, the login cookie is set to expire after 7 days. You can customise this via:
 
 ```php
-$controller->auth->setCookieLifetime(3600); 
+$staging->auth->setCookieLifetime(3600); 
 ```
 
-This sets the cookie lifetime in seconds.
+This sets the cookie lifetime in seconds (3600 = 1 hour).
 
 You can also set this in days:
 
 ```php
-$controller->auth->setCookieLifetimeInDays(14); 
+$staging->auth->setCookieLifetimeInDays(14); 
 ```
 
 You can also change the cookie name (default is `staging_site_remember_login`):
 
 ```php
-$controller->auth->setCookieName('remember_me'); 
+$staging->auth->setCookieName('remember_me'); 
 ``` 

@@ -1,4 +1,5 @@
 <?php
+
 define('ENVIRONMENT', 'production');
 require_once 'include.php';
 ?>

@@ -45,33 +45,10 @@ Add the following lines:
 use Studio24\StagingSite\StagingSite;
 
 // Display login page on staging
-StagingSite::run();
-
-// Block search engines from indexing staging site
-StagingSite::headers();
+StagingSite::run('ENVIRONMENT', 'staging');
 ```
 
-By default, this will display the staging site password based on:
+This will display the staging site password based on:
 
 * Environment variable: `ENVIRONMENT`
 * Staging environments: `staging`
-
-### Staging banner
-
-Output the staging banner via:
-
-```php
-<?php echo \Studio24\StagingSite\StagingSite::banner() ?>
-```
-
-Or via the short echo tag:
-
-```php
-<?= \Studio24\StagingSite\StagingSite::banner() ?>
-```
-
-You can add additional details to the staging banner via passing a string to the `banner()` method:
-
-```php
-<?= \Studio24\StagingSite\StagingSite::banner('additional details here') ?>
-```

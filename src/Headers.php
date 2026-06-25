@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Studio24\StagingSite;
@@ -8,14 +9,12 @@ namespace Studio24\StagingSite;
  */
 class Headers
 {
-
     /**
      * Set default headers
      * @link https://xclacksoverhead.org/home/about
      */
     private array $headers = [
         'X-Robots-Tag' => 'noindex, nofollow',
-        'X-Powered-By' => 'studio24/staging-site',
         'X-Clacks-Overhead' => 'GNU Terry Pratchett',
     ];
 

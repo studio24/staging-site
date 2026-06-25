@@ -20,27 +20,35 @@ require_once __DIR__ . '/../vendor/autoload.php';
 > Please note you may need to change the path to your vendor directory based on your WordPress installation.
 
 ## Staging site password
+
+It is recommended to not store the password hash in version control. 
+
 If you are using an `.env` file with your WordPress installation add the password hash to this file:
 
 ```
 STAGING_SITE_PASSWORD="your password hash"
 ```
 
-If you are not using an `.env` file, edit your `wp-config.php` file to add the password hash:
+If your hosting platform uses different methods to set environment variables, consult your hosting platform documentation. 
+
+As a last resort, you can set the environment variable in your `wp-config.php` file. This is normally committed to version control, so it is not recommended. But given the low risk you may consider this acceptable.
 
 ```php
 define('STAGING_SITE_PASSWORD', 'your password hash');
 ```
 
-Replacing `your password hash` with the password hash string generated in the "create a password hash" step.
+Replace `your password hash` with the password hash string generated in the "create a password hash" step.
 
 ## Must-use plugin
 
-Copy the file [staging-site-password.php](wordpress/staging-site-password.php) to your mu-plugins directory:
+Copy the file [staging-site-password.php](wordpress/staging-site-password.php) to your mu-plugins directory. This ensures the plugin always runs and cannot be removed.
 
 ```bash
-cp vendor/studio24/staging-site/wordpress/staging-site.php wp-content/mu-plugins/
+cp vendor/studio24/staging-site/wordpress/staging-site.php web/content/mu-plugins/
 ```
 
 > [!NOTE]  
-> Please note you may need to change the path to your mu-plugins directory based on your WordPress installation.
+> Please note you may need to change the path to your mu-plugins directory based on your WordPress installation. Common paths are:
+> - wp-content/mu-plugins
+> - web/wp-content/mu-plugins
+> - web/app/mu-plugins

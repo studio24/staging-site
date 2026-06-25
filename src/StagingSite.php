@@ -1,7 +1,10 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Studio24\StagingSite;
+
+use Studio24\StagingSite\Exception\StagingSiteException;
 
 /**
  * @todo set password via .env
@@ -21,9 +24,11 @@ class StagingSite
      */
     public Headers $headers;
 
-    private LoginPage $loginPage;
+    public LoginPage $loginPage;
+
     private ?bool $staging = null;
     private ?string $environment = null;
+    private string $loginPageHtml = '';
 
     /**
      * Environment variable to read current environment
@@ -41,6 +46,7 @@ class StagingSite
     {
         $this->auth = new Authenticate();
         $this->headers = new Headers();
+        $this->loginPage = new LoginPage($this->auth);
     }
 
     /**
@@ -99,10 +105,9 @@ class StagingSite
             return $this->environment;
         }
 
-        // try getenv
-        $env = getenv($this->environmentVariable);
-        if ($env !== false) {
-            $this->environment = $env;
+        // try $_ENV
+        if (isset($_ENV[$this->environmentVariable])) {
+            $this->environment = (string) $_ENV[$this->environmentVariable];
             return $this->environment;
         }
 
@@ -111,43 +116,37 @@ class StagingSite
 
     /**
      * Check if request is authenticated, if not display login page to user
-     * @return void
+     *
+     * @param bool $displayPageAndExit If true, display login page and exit, if false, return HTML
+     * @return bool Whether the user is authenticated
      */
-    public function authenticate()
+    public function authenticate(bool $displayPageAndExit = true): bool
     {
         // If authenticated, return back to the application
         if ($this->auth->authenticate()) {
-            return;
+            return true;
         }
 
         // Display login page
-        $loginPage = new LoginPage($this->auth);
-        $loginPage->displayPageAndExit();
+        if ($displayPageAndExit) {
+            $this->loginPage->displayPageAndExit();
+            return false;
+        } else {
+            $this->loginPageHtml = $this->loginPage->displayPageAndExit(false);
+            return false;
+        }
     }
 
-    /**
-     * Return staging banner HTML
-     * @param string|null $details Additional details to display in the banner
-     * @return string|null
-     */
-    public function getBannerHtml(?string $details = null): ?string
+    public function getLoginPageHtml(): string
     {
-        if (!$this->isStaging()) {
-            return null;
-        }
-        $template = new Template();
-        $template->setPlaceholders([
-            'environment' => $this->environment,
-            'details' => $details,
-        ]);
-        return $template->parseTemplate('banner.html');
+        return $this->loginPageHtml;
     }
 
     /**
      * Return a single instance of this class
      * @return StagingSite
      */
-    public static function singleton(): StagingSite
+    public static function getInstance(): StagingSite
     {
         static $instance = null;
         if (!($instance instanceof self)) {
@@ -162,24 +161,29 @@ class StagingSite
      * @param string $environmentVariable The environment variable to read the current environment from
      * @param string|array $stagingEnvironment The environment(s) that are considered staging
      * @param string|null $passwordHash The hashed password
-     * @return StagingSite
+     * @return StagingSite|null
      */
-    public static function run(?string $environmentVariable = null, string|array|null $stagingEnvironment = null, ?string $passwordHash = null): StagingSite
+    public static function run(?string $environmentVariable = null, string|array|null $stagingEnvironment = null, ?string $passwordHash = null): ?StagingSite
     {
-        $instance = StagingSite::singleton();
-        if (null !== $passwordHash) {
-            $instance->auth->setPasswordHash($passwordHash);
-        }
+        $instance = StagingSite::getInstance();
+
+        // Check environment and exit if not staging
         if (null !== $environmentVariable) {
             $instance->environmentVariable = $environmentVariable;
         }
         if (null !== $stagingEnvironment) {
             $instance->stagingEnvironments = $stagingEnvironment;
         }
-
-        if ($instance->isStaging()) {
-            $instance->authenticate();
+        if (!$instance->isStaging()) {
+            return null;
         }
+
+        // Continue with staging authentication
+        if (null !== $passwordHash) {
+            $instance->auth->setPasswordHash($passwordHash);
+        }
+        $instance->authenticate();
+
         return $instance;
     }
 
@@ -188,7 +192,7 @@ class StagingSite
      */
     public static function headers(): void
     {
-        $instance = StagingSite::singleton();
+        $instance = StagingSite::getInstance();
         if (!$instance->isStaging()) {
             return;
         }
@@ -196,16 +200,4 @@ class StagingSite
         // Output staging HTTP headers
         $instance->headers->outputHeaders();
     }
-
-    /**
-     * Static method to return the staging banner HTML
-     * @param string|null $details Additional details to display in the banner
-     * @return string
-     */
-    public static function banner(?string $details = null): ?string
-    {
-        $instance = StagingSite::singleton();
-        return $instance->getBannerHtml($details);
-    }
-
 }

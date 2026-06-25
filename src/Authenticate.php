@@ -1,7 +1,11 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Studio24\StagingSite;
+
+use Studio24\StagingSite\Exception\PasswordNotSetException;
+use Studio24\StagingSite\Exception\StagingSiteException;
 
 class Authenticate
 {
@@ -16,66 +20,121 @@ class Authenticate
 
     private ?string $passwordHash = null;
 
+    /**
+     * Set password hash for authentication
+     * @param string $passwordHash
+     */
     public function setPasswordHash(string $passwordHash)
     {
         $this->passwordHash = $passwordHash;
     }
 
+    /**
+     * Return the password hash, if not set retrieve from env variable
+     * @return string|null
+     */
     protected function getPasswordHash(): ?string
     {
-        // Try to get password from env variable or PHP constant
-        if (empty($this->passwordHash)) {
-            $password = getenv('STAGING_SITE_PASSWORD', true);
-            if ($password !== false) {
-                $this->passwordHash = $password;
-                return $this->passwordHash;
-            }
-            if (defined('STAGING_SITE_PASSWORD')) {
-                $this->passwordHash = STAGING_SITE_PASSWORD;
-            }
-            if (empty($this->passwordHash)) {
-                throw new Exception('Staging site password not set');
-            }
+        if (null !== $this->passwordHash) {
+            return $this->passwordHash;
         }
-        return $this->passwordHash;
+
+        // Try to get password from env variable or PHP constant
+        $password = getenv('STAGING_SITE_PASSWORD', true);
+        if ($password !== false) {
+            $this->passwordHash = $password;
+            return $this->passwordHash;
+        }
+        if (defined('STAGING_SITE_PASSWORD')) {
+            $this->passwordHash = STAGING_SITE_PASSWORD;
+            return $this->passwordHash;
+        }
+
+        throw new StagingSiteException('Staging site password not set');
     }
 
+    /**
+     * Set the cookie name to use for storing the login cookie
+     * @param string $cookieName
+     */
     public function setCookieName(string $cookieName)
     {
         $this->cookieName = $cookieName;
     }
 
+    /**
+     * Set the cookie lifetime in seconds
+     * @param int $seconds
+     */
     public function setCookieLifetime(int $seconds)
     {
         $this->cookieLifetime = $seconds;
     }
 
+    /**
+     * Set the cookie lifetime in days
+     * @param int $days
+     */
     public function setCookieLifetimeInDays(int $days)
     {
         $this->cookieLifetime = $days * 86400;
     }
 
     /**
-     * Check authentication for the staging site
-     * @return bool
-     * @throws Exception
+     * Return GET or POST variables
      */
-    public function authenticate(): bool
+    public function get(string $variable, string $type = 'get'): ?string
     {
+        switch ($type) {
+            case 'get':
+                if (isset($_GET[$variable])) {
+                    return $_GET[$variable];
+                }
+                break;
+            case 'post':
+                if (isset($_POST[$variable])) {
+                    return $_POST[$variable];
+                }
+                break;
+        }
+        return null;
+    }
+
+    /**
+     * Check authentication for the staging site
+     * @param string|null $password Password value from login form
+     * @param string|null $stagingSiteLogin staging_site_login value fro login form
+     * @param string|null $stagingSiteLogout staging_site_logout value fro login form
+     * @return bool
+     * @throws StagingSiteException
+     */
+    public function authenticate(?string $password = null, ?string $stagingSiteLogin = null, ?string $stagingSiteLogout = null): bool
+    {
+        // Set form values
+        if (null === $password) {
+            $password = $this->get('password', 'post');
+        }
+        if (null === $stagingSiteLogin) {
+            $stagingSiteLogin = $this->get('staging_site_login', 'post');
+        }
+        if (null === $stagingSiteLogout) {
+            $stagingSiteLogout = $this->get('staging_site_logout');
+        }
+
+        // Logout attempt
+        if (null !== $this->get('staging_site_logout')) {
+            $this->clearLoginCookie();
+            return false;
+        }
+
         // Login attempt
-        if (isset($_POST['staging_site_login']) && isset($_POST['password'])) {
+        if ((null !== $this->get('staging_site_login', 'post')) && (null !== $this->get('password', 'post'))) {
             if ($this->checkPassword($_POST['password'])) {
                 $this->storeLoginInCookie();
                 return true;
             } else {
                 $this->error = true;
             }
-        }
-
-        // Logout attempt
-        if (isset($_GET['staging_site_logout'])) {
-            $this->clearLoginCookie();
-            return false;
         }
 
         // Check if user is already logged in
@@ -92,6 +151,10 @@ class Authenticate
         return false;
     }
 
+    /**
+     * Generate unique string based on the user agent and hashed password
+     * @return string
+     */
     protected function getUniqueStringForUser(): string
     {
         $identifier = '';
@@ -105,7 +168,7 @@ class Authenticate
     }
 
     /**
-     * Store a unique value in the cookie based on the user agent and hashed password
+     * Store a unique value in the cookie
      * @return void
      */
     protected function storeLoginInCookie()
@@ -133,10 +196,10 @@ class Authenticate
         unset($_SESSION[$this->cookieName]);
     }
 
-    protected function checkPassword(string $password): bool
+    public function checkPassword(string $password): bool
     {
         if (empty($this->getPasswordHash())) {
-            throw new Exception('Staging site password not set');
+            throw new PasswordNotSetException('Staging site password not set');
         }
         return password_verify($password, $this->getPasswordHash());
     }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Studio24\StagingSite;
 
 class LoginPage extends Template
@@ -30,7 +32,12 @@ class LoginPage extends Template
         $this->auth = $auth;
     }
 
-    public function displayPageAndExit(bool $exit = true)
+    /**
+     * Display login page and optionally exit
+     *
+     * @param bool $exit If true, display login page and exit, if false, return HTML
+     */
+    public function displayPageAndExit(bool $exit = true): string
     {
         if ($this->auth->hasError()) {
             $this->placeholders['error_message'] = $this->parseTemplate('error.html', $this->placeholders);
@@ -41,20 +48,22 @@ class LoginPage extends Template
         $this->placeholders['form_action'] = str_replace('staging_site_logout', '', $_SERVER['REQUEST_URI']);
         $html = $this->parseTemplate('login.html', $this->placeholders);
 
+        // HTTP headers
+        $headers = new Headers();
+        $headers->setHeader('Cache-Control', 'no-cache, no-store');
+
+        if (!$exit) {
+            return $html;
+        }
+
         // 401 Unauthorized
         http_response_code(401);
 
         // HTTP headers
-        $headers = new Headers();
-        $headers->setHeader('Cache-Control', 'no-cache, no-store');
         $headers->outputHeaders();
 
-        // Output page & exit
+        // Exit or return HTML
         echo $html;
-
-        if ($exit) {
-            exit(0);
-        }
+        exit(0);
     }
-
 }

@@ -1,9 +1,9 @@
 <?php
+
 declare(strict_types=1);
 
-namespace Studio24\StagingSite;
+namespace Studio24\StagingSite\Exception;
 
 class StagingSiteException extends \Exception
 {
-
 }

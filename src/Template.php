@@ -1,7 +1,10 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Studio24\StagingSite;
+
+use Studio24\StagingSite\Exception\StagingSiteException;
 
 /**
  * Parse a template
@@ -71,5 +74,4 @@ class Template
 
         return $html;
     }
-
 }

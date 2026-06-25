@@ -1,16 +1,24 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Studio24\StagingSite\Symfony;
 
 use Studio24\StagingSite\StagingSite;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
+use Symfony\Component\HttpKernel\KernelInterface;
 
 class StagingSiteEventSubscriber implements EventSubscriberInterface
 {
     private StagingSite $staging;
+
+    public function __construct(private KernelInterface $kernel)
+    {
+        $this->staging = StagingSite::getInstance();
+    }
 
     public static function getSubscribedEvents(): array
     {
@@ -32,11 +40,11 @@ class StagingSiteEventSubscriber implements EventSubscriberInterface
         }
 
         // Staging site authentication
-        $this->staging = new StagingSite();
-        $this->setEnvironment($this->kernel->getEnvironment());
-        $this->setStagingEnvironments(['stage', 'staging']);
-        if ($this->isStaging()) {
-            $this->authenticate();
+        $this->staging->setEnvironment($this->kernel->getEnvironment());
+        $this->staging->setStagingEnvironments(['stage', 'staging']);
+        if ($this->staging->isStaging() && !$this->staging->authenticate(false)) {
+            $response = new Response($this->staging->getLoginPageHtml(), 401);
+            $event->setResponse($response);
         }
     }
 
@@ -48,11 +56,10 @@ class StagingSiteEventSubscriber implements EventSubscriberInterface
         }
 
         // Block search engines from indexing staging site
-        if ($this->isStaging()) {
+        if ($this->staging->isStaging()) {
             foreach ($this->staging->headers->getHeaders() as $name => $value) {
-                $event->headers->set($name, $value, $this->staging->headers->replace($name));
+                $event->getResponse()->headers->set($name, $value, $this->staging->headers->replace($name));
             }
         }
     }
-
 }
