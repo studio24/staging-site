@@ -48,9 +48,9 @@ class LoginPage extends Template
         $this->placeholders['form_action'] = str_replace('staging_site_logout', '', $_SERVER['REQUEST_URI']);
         $html = $this->parseTemplate('login.html', $this->placeholders);
 
-        // HTTP headers
-        $headers = new Headers();
-        $headers->setHeader('Cache-Control', 'no-cache, no-store');
+        // This has been moved to Headers class for now, leaving this here in case it's removed in the future and we re-add this code
+        //$headers = new Headers();
+        //$headers->setHeader('Cache-Control', 'no-cache, no-store');
 
         if (!$exit) {
             return $html;
@@ -60,6 +60,7 @@ class LoginPage extends Template
         http_response_code(401);
 
         // HTTP headers
+        $headers = new Headers();
         $headers->outputHeaders();
 
         // Exit or return HTML

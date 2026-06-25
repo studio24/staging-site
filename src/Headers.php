@@ -10,10 +10,12 @@ namespace Studio24\StagingSite;
 class Headers
 {
     /**
-     * Set default headers
+     * Set default headers for all requests protected by this package
+     *
      * @link https://xclacksoverhead.org/home/about
      */
     private array $headers = [
+        'Cache-Control' => 'no-cache, no-store',
         'X-Robots-Tag' => 'noindex, nofollow',
         'X-Clacks-Overhead' => 'GNU Terry Pratchett',
     ];

@@ -39,8 +39,8 @@ class Authenticate
             return $this->passwordHash;
         }
 
-        // Try to get password from env variable or PHP constant
-        $password = getenv('STAGING_SITE_PASSWORD', true);
+        // Try to get password from environment variable or PHP constant
+        $password = $_ENV['STAGING_SITE_PASSWORD'] ?? false;
         if ($password !== false) {
             $this->passwordHash = $password;
             return $this->passwordHash;
