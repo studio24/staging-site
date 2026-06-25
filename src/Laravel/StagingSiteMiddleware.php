@@ -10,7 +10,6 @@ use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Studio24\StagingSite\StagingSite;
 
-
 class StagingSiteMiddleware
 {
     /**
