@@ -47,7 +47,7 @@ If you want to customise the options, then you need a bit more code. The followi
 use Studio24\StagingSite\StagingSite;
 
 // Setup staging
-$staging = new StagingSite();
+$staging = StagingSite::getInstance();
 $staging->setStagingEnvironments('staging');
 $staging->setEnvironment($_ENV['WP_ENVIRONMENT_TYPE']);
 

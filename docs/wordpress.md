@@ -19,9 +19,18 @@ require_once __DIR__ . '/../vendor/autoload.php';
 > [!NOTE]  
 > Please note you may need to change the path to your vendor directory based on your WordPress installation.
 
+## WP_ENVIRONMENT_TYPE
+
+It is a pre-requisite that the environment variable `WP_ENVIRONMENT_TYPE` is set correctly in your different environments.
+This is the default way for WordPress to determine the environment.
+
+See https://developer.wordpress.org/reference/functions/wp_get_environment_type/ 
+
 ## Staging site password
 
 It is recommended to not store the password hash in version control. 
+
+### .env
 
 If you are using an `.env` file with your WordPress installation add the password hash to this file:
 
@@ -29,7 +38,25 @@ If you are using an `.env` file with your WordPress installation add the passwor
 STAGING_SITE_PASSWORD="your password hash"
 ```
 
-If your hosting platform uses different methods to set environment variables, consult your hosting platform documentation. 
+### Set environment variable on your hosting platform
+
+If your hosting platform uses different methods to set environment variables, consult your hosting platform documentation
+on how to set the environment variable `STAGING_SITE_PASSWORD`.
+
+
+### Studio 24 multi-environment config
+
+If you use [studio24/wordpress-multi-env-config](https://github.com/studio24/wordpress-multi-env-config) to help manage 
+WordPress config you can add the following to `config/wp-config.local.php` (not in version control): 
+
+```php
+define('STAGING_SITE_PASSWORD', 'your password hash');
+```
+
+Make sure you are using version 2.0.3+ of studio24/wordpress-multi-env-config which includes code to set WP_ENVIRONMENT_TYPE.
+You can upgrade by copying the [wp-config.load.php](https://github.com/studio24/wordpress-multi-env-config/blob/main/wp-config.load.php) file.
+
+### wp-config.php
 
 As a last resort, you can set the environment variable in your `wp-config.php` file. This is normally committed to version control, so it is not recommended. But given the low risk you may consider this acceptable.
 

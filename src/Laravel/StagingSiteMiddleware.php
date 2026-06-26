@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Studio24\StagingSite\Laravel;
 
 use Closure;
+use Illuminate\Support\Facades\App;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Studio24\StagingSite\StagingSite;
@@ -19,16 +20,14 @@ class StagingSiteMiddleware
     public function handle(Request $request, Closure $next): Response
     {
         // Skip on production
-        if (app()->environment('production')) {
+        if (App::environment('production')) {
             return $next($request);
         }
 
         // Staging site authentication
         $staging = StagingSite::getInstance();
-        $environment = env('APP_ENV');
-        if (null !== $environment) {
-            $staging->setEnvironment($environment);
-        }
+        $staging->setEnvironment(App::environment());
+
         $staging->setStagingEnvironments(['stage', 'staging']);
         if ($staging->isStaging() && !$staging->authenticate(false)) {
             $response = $next($request);

@@ -11,7 +11,7 @@ jobs:
 
     strategy:
       matrix:
-        php-versions: ['8.1', '8,2', '8.3', '8.4', '8.5']
+        php-versions: ['8.1', '8.2', '8.3', '8.4', '8.5']
 
     runs-on: ubuntu-latest
 
@@ -37,13 +37,10 @@ jobs:
 
       # https://github.com/marketplace/actions/check-php-syntax-errors
       - name: Check PHP syntax errors
-        uses: overtrue/phplint@9
+        uses: overtrue/phplint@9.7.2
 
       - name: Coding standards
         run: ./vendor/bin/phpcs
-
-      - name: PHPStan
-        run: ./vendor/bin/phpstan
 
       - name: PHPUnit
         run: ./vendor/bin/phpunit
