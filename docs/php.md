@@ -42,13 +42,109 @@ require_once __DIR__ . '/../vendor/autoload.php';
 Add the following lines:
 
 ```php
-use Studio24\StagingSite\StagingSite;
-
-// Display login page on staging
-StagingSite::run('ENVIRONMENT', 'staging');
+\Studio24\StagingSite\StagingSite::run('ENVIRONMENT', 'staging');
 ```
+This depends on the environment being set either as a PHP constant or an environment variable. If this isn't the case,
+see the [Standalone file](#standalone-file) section below.
 
 This will display the staging site password based on:
 
 * Environment variable: `ENVIRONMENT`
 * Staging environments: `staging`
+
+## Standalone file
+
+You can also create one PHP file and include this on all requests to PHP pages.
+
+Create a PHP file called `staging.php`
+
+Add the code:
+
+```php
+require_once __DIR__ . '/vendor/autoload.php';
+
+use Studio24\StagingSite\StagingSite;
+
+// Setup staging
+$staging = StagingSite::getInstance();
+$staging->setStagingEnvironments('staging');
+$staging->setEnvironment($_ENV['ENVIRONMENT']);
+
+// Authenticate
+if ($staging->isStaging()) {
+    $staging->authenticate();
+}
+```
+
+Make sure you set the correct vendor path and replace `$_ENV['ENVIRONMENT']` with the correct code to retrieve the current environment.
+This is easier to do if environment variables are set by your hosting platform.
+
+If the environment is not automatically set and you have an `.env` file with the current environment (not in version control) you can use this code to load this.
+We've included two examples using popular dotenv packages.
+
+Using [symfony/dotenv](https://github.com/symfony/dotenv):
+
+
+```php
+require_once __DIR__ . '/vendor/autoload.php';
+
+use Studio24\StagingSite\StagingSite;
+use Symfony\Component\Dotenv\Dotenv;
+
+// Load .env
+$dotenv = new Dotenv();
+$dotenv->load(__DIR__.'/.env');
+
+// Setup staging
+$staging = StagingSite::getInstance();
+$staging->setStagingEnvironments('staging');
+$staging->setEnvironment($_ENV['ENVIRONMENT']);
+
+// Authenticate
+if ($staging->isStaging()) {
+    $staging->authenticate();
+}
+```
+
+Using [vlucas/phpdotenv](https://github.com/vlucas/phpdotenv):
+
+```php
+require_once __DIR__ . '/vendor/autoload.php';
+
+use Studio24\StagingSite\StagingSite;
+
+// Load .env
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->load();
+
+// Setup staging
+$staging = StagingSite::getInstance();
+$staging->setStagingEnvironments('staging');
+$staging->setEnvironment($_ENV['ENVIRONMENT']);
+
+// Authenticate
+if ($staging->isStaging()) {
+    $staging->authenticate();
+}
+```
+
+### Require
+
+You can insert this code into the top of every PHP file you want to protect:
+
+```php
+require_once __DIR__ . '/staging.php';
+```
+
+Make sure the path to `staging.php` is correct.
+
+### Auto-prepend file
+
+Or you can use [auto-prepend file](https://www.php.net/manual/en/ini.core.php#ini.auto-prepend-file)
+to prepend this file to all PHP requests in a folder by adding this to your `.htaccess` file:
+
+```shell
+php_value auto_prepend_file /path/to/staging.php
+```
+
+Make sure the path to `staging.php` is correct to the htaccess file. Please note this uses PHP's `include_path` so the path can be relative to the include path.
