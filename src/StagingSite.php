@@ -6,10 +6,6 @@ namespace Studio24\StagingSite;
 
 use Studio24\StagingSite\Exception\StagingSiteException;
 
-/**
- * @todo set password via .env
- * @todo customise login page via placeholders
- */
 class StagingSite
 {
     /**

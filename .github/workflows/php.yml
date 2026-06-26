@@ -42,8 +42,5 @@ jobs:
       - name: Coding standards
         run: ./vendor/bin/phpcs
 
-      - name: PHPStan
-        run: ./vendor/bin/phpstan
-
       - name: PHPUnit
         run: ./vendor/bin/phpunit

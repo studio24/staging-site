@@ -53,6 +53,9 @@ WordPress config you can add the following to `config/wp-config.local.php` (not 
 define('STAGING_SITE_PASSWORD', 'your password hash');
 ```
 
+Make sure you are using version 2.0.3+ of studio24/wordpress-multi-env-config which includes code to set WP_ENVIRONMENT_TYPE.
+You can upgrade by copying the [wp-config.load.php](https://github.com/studio24/wordpress-multi-env-config/blob/main/wp-config.load.php) file.
+
 ### wp-config.php
 
 As a last resort, you can set the environment variable in your `wp-config.php` file. This is normally committed to version control, so it is not recommended. But given the low risk you may consider this acceptable.
