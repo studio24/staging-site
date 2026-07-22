@@ -91,8 +91,6 @@ The full list of placeholders:
 | `error_message`         | The password is incorrect |
 | `show`                  | Show                      |
 | `hide`                  | Hide                      |
-| `show_password`         | Show password             |
-| `hide_password`         | Hide password             |
 
 ### Cookie lifetime
 

@@ -172,13 +172,11 @@
         showPassword() {
             this.input.type = 'text';
             this.button.innerText = '{{ hide }}';
-            this.button.setAttribute('aria-labels', '{{ hide_password }}');
         }
 
         hidePassword() {
             this.input.type = 'password';
             this.button.innerText = '{{ show }}';
-            this.button.setAttribute('aria-labels', '{{ show_password }}');
         }
 
     });
