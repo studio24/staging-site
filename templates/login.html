@@ -19,6 +19,17 @@
             background-color: #f0f0f0;
         }
 
+        .visuallyhidden {
+            block-size: 1px;
+            border: 0;
+            clip-path: inset(50%);
+            inline-size: 1px;
+            overflow: hidden;
+            padding: 0;
+            position: absolute;
+            white-space: nowrap;
+        }
+
         h1 {
             font-weight: 600;
             margin: 0;
@@ -143,15 +154,21 @@
             // Define instance property
             this.input = this.querySelector('input[type=password]');
 
-            // Add ARIA live region to button (announces changes to screen readers)
-            this.input.setAttribute('aria-live', 'polite');
-
             // Create show button
             this.button = document.createElement('button');
             this.button.type = 'button';
             this.button.setAttribute('aria-controls', 'password-input');
             this.hidePassword();
             this.input.after(this.button);
+
+            // Create and append a status region for updating screen readers.
+            // This is injected between the input and button for a sensible reading order when
+            // moving through the page content linearly:
+            // [password input] -> [your password is visible/hidden] -> [show/hide password]
+            this.screenReaderStatusMessage = document.createElement('div');
+            this.screenReaderStatusMessage.setAttribute('class', 'visuallyhidden');
+            this.screenReaderStatusMessage.setAttribute('aria-live', 'polite');
+            this.input.after(this.screenReaderStatusMessage);
 
             // Listen for click events on the button, you can pass instance rather than callback function, this runs handleEvent
             this.button.addEventListener('click', this);
