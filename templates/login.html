@@ -158,7 +158,7 @@
             this.button = document.createElement('button');
             this.button.type = 'button';
             this.button.setAttribute('aria-controls', 'password-input');
-            this.hidePassword();
+            this.button.innerText = '{{ show }}';
             this.input.after(this.button);
 
             // Create and append a status region for updating screen readers.
@@ -189,11 +189,13 @@
         showPassword() {
             this.input.type = 'text';
             this.button.innerText = '{{ hide }}';
+            this.screenReaderStatusMessage.innerText = '{{ pw_shown }}';
         }
 
         hidePassword() {
             this.input.type = 'password';
             this.button.innerText = '{{ show }}';
+            this.screenReaderStatusMessage.innerText = '{{ pw_hidden }}';
         }
 
     });

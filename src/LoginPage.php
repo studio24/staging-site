@@ -15,6 +15,8 @@ class LoginPage extends Template
         'password_field_label' => 'Password',
         'show' => 'Show',
         'hide' => 'Hide',
+        'pw_shown' => 'Your password is visible',
+        'pw_hidden' => 'Your password is hidden',
         'submit_field_label' => 'Login',
         'error_message_title' => 'There is a problem',
         'error_message' => 'The password is incorrect',
