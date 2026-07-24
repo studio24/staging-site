@@ -1,3 +1,6 @@
 <?php
 
-\Studio24\StagingSite\StagingSite::run('WP_ENVIRONMENT_TYPE', 'staging');
+// Disable if run via WP CLI
+if (!(defined('WP_CLI') && WP_CLI)) {
+    \Studio24\StagingSite\StagingSite::run('WP_ENVIRONMENT_TYPE', 'staging');
+}

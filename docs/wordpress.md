@@ -68,7 +68,7 @@ Replace `your password hash` with the password hash string generated in the "cre
 
 ## Must-use plugin
 
-Copy the file [staging-site-password.php](wordpress/staging-site-password.php) to your mu-plugins directory. This ensures the plugin always runs and cannot be removed.
+Copy the file [staging-site.php](../wordpress/staging-site.php) to your mu-plugins directory. This ensures the plugin always runs and cannot be removed.
 
 ```bash
 cp vendor/studio24/staging-site/wordpress/staging-site.php web/content/mu-plugins/
