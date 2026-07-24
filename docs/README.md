@@ -80,17 +80,19 @@ $staging->loginPage->setPlaceholder('footer', 'Get support from <a href="mailto:
 
 The full list of placeholders:
 
-| Placeholder name        | Default value             |
-|-------------------------|---------------------------|
-| `title`                 | Login to staging website  |
-| `footer`                |                           |
-| `password_field_label`  | Password                  |
-| `submit_field_label`    | Login                     |
-| `title_prefix_on_error` | Error:                    |
-| `error_message_title`   | There is a problem        |
-| `error_message`         | The password is incorrect |
-| `show`                  | Show                      |
-| `hide`                  | Hide                      |
+| Placeholder name        | Default value              |
+|-------------------------|----------------------------|
+| `title`                 | Login to staging website   |
+| `footer`                |                            |
+| `password_field_label`  | Password                   |
+| `submit_field_label`    | Login                      |
+| `title_prefix_on_error` | Error:                     |
+| `error_message_title`   | There is a problem         |
+| `error_message`         | The password is incorrect  |
+| `show`                  | Show                       |
+| `hide`                  | Hide                       |
+| `pw_shown`              | Your password is visible   |
+| `pw_hidden`             | Your password is hidden    |
 
 ### Cookie lifetime
 
