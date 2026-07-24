@@ -66,5 +66,4 @@ class LoginPageTest extends TestCase
         // Test error appears in input field
         $this->assertStringContainsString('<span class="visuallyhidden">Error:</span> Enter a password', $html);
     }
-
 }
