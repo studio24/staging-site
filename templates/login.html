@@ -112,6 +112,12 @@
             margin: 0;
         }
 
+        .field-error-msg {
+            color: #a4141b;
+            font-weight: 600;
+            margin-block: 0.9375rem 0;
+        }
+
         footer {
             text-align: center;
             font-size: 0.8em;
@@ -131,7 +137,8 @@
         <input type="hidden" name="staging_site_login" value="yes">
         <show-password>
             <label for="password-input">{{ password_field_label }}</label>
-            <input type="password" id="password-input" name="password" autocomplete="current-password" autocapitalize="none" autocorrect="off" spellcheck="false">
+            {{ input_error_message }}
+            <input type="password" id="password-input" name="password" autocomplete="current-password" autocapitalize="none" autocorrect="off" spellcheck="false" {{ input_aria_describedby }}>
         </show-password>
         <button type="submit">{{ submit_field_label }}</button>
     </form>
