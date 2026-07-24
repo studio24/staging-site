@@ -42,7 +42,7 @@ class LoginPage extends Template
         if ($this->auth->hasError()) {
             $this->placeholders['error_message'] = $this->parseTemplate('error.html', $this->placeholders);
             $this->placeholders['input_error_message'] = $this->parseTemplate('input_error_message.html');
-            $this->placeholders['input_aria_describedby'] = 'aria-describedby="error-name"';
+            $this->placeholders['input_aria_describedby'] = 'aria-describedby="error-pw"';
         } else {
             $this->placeholders['error_message'] = '';
             $this->placeholders['title_prefix_on_error'] = '';
