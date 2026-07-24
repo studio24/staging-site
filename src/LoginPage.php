@@ -15,8 +15,8 @@ class LoginPage extends Template
         'password_field_label' => 'Password',
         'show' => 'Show',
         'hide' => 'Hide',
-        'show_password' => 'Show password',
-        'hide_password' => 'Hide password',
+        'pw_shown' => 'Your password is visible',
+        'pw_hidden' => 'Your password is hidden',
         'submit_field_label' => 'Login',
         'error_message_title' => 'There is a problem',
         'error_message' => 'The password is incorrect',
@@ -41,6 +41,8 @@ class LoginPage extends Template
     {
         if ($this->auth->hasError()) {
             $this->placeholders['error_message'] = $this->parseTemplate('error.html', $this->placeholders);
+            $this->placeholders['input_error_message'] = $this->parseTemplate('input_error_message.html');
+            $this->placeholders['input_aria_describedby'] = 'aria-describedby="error-pw"';
         } else {
             $this->placeholders['error_message'] = '';
             $this->placeholders['title_prefix_on_error'] = '';

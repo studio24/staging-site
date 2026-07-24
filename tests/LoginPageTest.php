@@ -46,6 +46,9 @@ class LoginPageTest extends TestCase
 
         $this->assertStringContainsString('<form', $html);
         $this->assertStringContainsString('Login to staging website', $html);
+
+        // Test empty placeholders
+        $this->assertStringNotContainsString('{{', $html);
     }
 
     public function testDisplayPageAndExitWithErrorShowsErrorBlock(): void
@@ -59,5 +62,8 @@ class LoginPageTest extends TestCase
 
         $this->assertStringContainsString('There is a problem', $html);
         $this->assertStringContainsString('The password is incorrect', $html);
+
+        // Test error appears in input field
+        $this->assertStringContainsString('<span class="visuallyhidden">Error:</span> Enter a password', $html);
     }
 }

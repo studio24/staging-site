@@ -44,6 +44,14 @@ If the action fails to run you can view the action and select `Re-run all jobs` 
 Once a release PR is merged in this will automatically create a new release at [Packagist](https://packagist.org)
 so code can be loaded via Composer.
 
+## Testing in a web browser
+
+To test the staging site login in a browser on http://localhost:8000/ run:
+
+```
+php -S localhost:8000 -t tests/website
+```
+
 ## Unit tests
 
 Please add unit tests for all bug fixes and new code changes.

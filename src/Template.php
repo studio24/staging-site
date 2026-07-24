@@ -72,6 +72,9 @@ class Template
             $html = str_replace('{{ ' . $placeholder . ' }}', $value, $html);
         }
 
+        // Remove any unused placeholders
+        $html = preg_replace('/{{ .+ }}/', '', $html);
+
         return $html;
     }
 }
