@@ -28,7 +28,8 @@ The staging site login page is a replacement for basic authentication, which doe
 
 ### How long are you logged in for?
 
-By default, the login cookie is set to expire after 7 days. If your IP address or user agent changes, then you are also logged out.
+By default, the login cookie is set to expire after 7 days. The cookie that is used to remember your staging website login also uses your user agent string.
+If your user agent changes, then you are also logged out.
 
 ### Logout
 

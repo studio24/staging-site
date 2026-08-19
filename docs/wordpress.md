@@ -22,7 +22,24 @@ require_once __DIR__ . '/../vendor/autoload.php';
 ## WP_ENVIRONMENT_TYPE
 
 It is a pre-requisite that the environment variable `WP_ENVIRONMENT_TYPE` is set correctly in your different environments.
-This is the default way for WordPress to determine the environment.
+Valid values are: local, production, staging, development. Example:
+
+```php
+define('WP_ENVIRONMENT_TYPE', 'production');
+```
+
+If your WordPress site uses an `.env` file:
+
+```php
+define('WP_ENVIRONMENT_TYPE', $_ENV['WP_ENVIRONMENT_TYPE']);
+```
+
+For older sites that may not set this variable, for example some old sites use `WP_ENV` it is recommended we set this 
+since this is now the official way for WordPress to determine the environment. Example:
+
+```php
+define('WP_ENVIRONMENT_TYPE', WP_ENV);
+```
 
 See https://developer.wordpress.org/reference/functions/wp_get_environment_type/ 
 
