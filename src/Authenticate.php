@@ -157,14 +157,7 @@ class Authenticate
      */
     protected function getUniqueStringForUser(): string
     {
-        $identifier = '';
-        if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-            $identifier .= $_SERVER['HTTP_X_FORWARDED_FOR'];
-        } else {
-            $identifier .= $_SERVER['REMOTE_ADDR'];
-        }
-        $identifier .= ':' . $_SERVER['HTTP_USER_AGENT'] . ':' . md5($this->getPasswordHash());
-        return $identifier;
+        return $_SERVER['HTTP_USER_AGENT'] . ':' . md5($this->getPasswordHash());
     }
 
     /**
