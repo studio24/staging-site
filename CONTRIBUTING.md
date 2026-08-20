@@ -11,6 +11,13 @@ must accept these license and copyright conditions.
 
 All contributions must be made on a branch and must pass [unit tests](#tests) and [coding standards](#coding-standards).
 
+To run tests:
+
+```bash
+composer test
+composer cs
+```
+
 Please create a Pull Request to merge changes into the `main` branch, these will be automatically tested by
 GitHub Actions.
 
