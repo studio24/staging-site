@@ -2,6 +2,13 @@
 
 All notable changes to staging-site will be documented in this file.
 
+## [0.1.3](https://github.com/studio24/staging-site/compare/v0.1.2...v0.1.3) (2026-08-20)
+
+
+### Bug Fixes
+
+* Removed IP addresses from user identifier to prevent unreliable behaviour where user IP or proxy hosts might change unpredictably. ([ff90c92](https://github.com/studio24/staging-site/commit/ff90c92048aa6683678e2c1ed0324f8d679d7c25))
+
 ## [0.1.2](https://github.com/studio24/staging-site/compare/v0.1.1...v0.1.2) (2026-07-24)
 
 
