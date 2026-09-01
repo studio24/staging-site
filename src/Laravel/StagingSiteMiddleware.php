@@ -24,22 +24,31 @@ class StagingSiteMiddleware
             return $next($request);
         }
 
-        // Staging site authentication
+        // Skip if not staging
         $staging = StagingSite::getInstance();
         $staging->setEnvironment(App::environment());
-
         $staging->setStagingEnvironments(['stage', 'staging']);
-        if ($staging->isStaging() && !$staging->authenticate(false)) {
-            $response = $next($request);
-            $response->setStatusCode(401);
-            $response->setContent($staging->getLoginPageHtml());
+        if (!$staging->isStaging()) {
+            return $next($request);
+        }
 
-            // Block search engines from indexing staging site
+        // Check staging authentication
+        $staging->auth->setPasswordHash(config('staging-site.password'));
+        $isLoginAttempt = $request->isMethod('post') && $request->filled('staging_site_login');
+        $authenticated = $staging->authenticate(false);
+
+        if (!$authenticated) {
+            // Create new response for login page
+            $response = new Response($staging->getLoginPageHtml(), 401);
             foreach ($staging->headers->getHeaders() as $name => $value) {
                 $response->headers->set($name, $value, $staging->headers->replace($name));
             }
-
             return $response;
+        }
+
+        if ($isLoginAttempt) {
+            // If login attempt, redirect to requested page since real route may not accept POST
+            return redirect($request->fullUrl());
         }
 
         return $next($request);
